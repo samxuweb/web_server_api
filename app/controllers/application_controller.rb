@@ -8,4 +8,5 @@ class ApplicationController < ActionController::Base
     1.upto(len){|i| newrandom << rand(10).to_s}
     return newrandom
   end
+
 end

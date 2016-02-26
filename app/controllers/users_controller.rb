@@ -106,6 +106,7 @@ class UsersController < ApplicationController
       if @user && @user.security_code && ((Time.now) - @user.security_code.created_at < 1800)
         if @user.security_code.code == set_password_params[:security_code]
           @user.userpwd = set_password_params[:new_userpwd]
+          @user.security_code.destroy
           if @user.save
             @status = 0
           else
