@@ -12,3 +12,6 @@
 !/log/.keep
 /tmp
 /config/database.yml
+/config/environments/*
+/config/secrets.yml
+/db/schema.rb

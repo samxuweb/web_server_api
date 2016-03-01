@@ -4,12 +4,12 @@ class UsersController < ApplicationController
 
   def create
     if create_params.has_key?(:username) && create_params.has_key?(:userpwd)
-      info_params = create_params
-      info_params.delete(:username)
-      info_params.delete(:userpwd)
       @user = User.new(:username => create_params[:username], :userpwd => create_params[:userpwd])
-      info_params[:head_portrait] = default_head_portrait if !info_params.has_key?(:head_portrait)
-      @user.info = Info.new(info_params)
+      @user.info = Info.new
+      @user.info.user_sex = create_params[:user_sex] if create_params.has_key?(:user_sex)
+      if !request.get? && create_params.has_key?(:head_portrait)
+        @user.info.head_portrait = upload_image(create_params[:head_portrait])
+      end
       @user.setting = Setting.new
       if @user.save
         @status = 0
@@ -22,10 +22,11 @@ class UsersController < ApplicationController
       @status = 11 if !create_params.has_key?(:userpwd)
       @status = 10 if !create_params.has_key?(:username)
     end
+    render :json => {:status => @status}
   end
 
   def login
-
+    render :json => {:status => @status}
   end
 
   def update_info
@@ -47,6 +48,7 @@ class UsersController < ApplicationController
       @status = 11 if !update_info_params.has_key?(:userpwd)
       @status = 10 if !update_info_params.has_key?(:username)
     end
+    render :json => {:status => @status}
   end
 
   def get_info
@@ -76,6 +78,7 @@ class UsersController < ApplicationController
       @status = 11 if !update_setting_params.has_key?(:userpwd)
       @status = 10 if !update_setting_params.has_key?(:username)
     end
+    render :json => {:status => @status}
   end
 
   def get_setting
@@ -99,6 +102,7 @@ class UsersController < ApplicationController
     else
       @status = 10 if !lost_password_params
     end
+    render :json => {:status => @status}
   end
 
   def set_password
@@ -107,7 +111,7 @@ class UsersController < ApplicationController
       if @user && @user.security_code && ((Time.now) - @user.security_code.created_at < 1800)
         if @user.security_code.code == set_password_params[:security_code]
           @user.userpwd = set_password_params[:new_userpwd]
-	  @user.security_code.destroy
+          @user.security_code.destroy
           if @user.save
             @status = 0
           else
@@ -124,6 +128,53 @@ class UsersController < ApplicationController
       @status = 12 if !set_password_params.has_key?(:new_userpwd)
       @status = 11 if !set_password_params.has_key?(:security_code)
       @status = 10 if !set_password_params.has_key?(:username)
+    end
+    render :json => {:status => @status}
+  end
+
+  def upload_head_portrait
+    if upload_params.has_key?(:username) && upload_params.has_key?(:userpwd) && upload_params.has_key?(:head_portrait)
+      @user = User.find_by_username(upload_params[:username])
+      if request.get?
+        @status = 30
+      elsif @user && @user.userpwd == upload_params[:userpwd]
+        @user.info.head_portrait = upload_image(upload_params[:head_portrait])
+        if @user.info.save
+          @status = 0
+        else
+          @status = 30
+        end
+      else
+        @status = 20
+      end 
+    else
+      @status = 12 if !upload_params.has_key?(:head_portrait)
+      @status = 11 if !upload_params.has_key?(:userpwd)
+      @status = 10 if !upload_params.has_key?(:username)
+    end
+    render :json => {:status => @status}
+  end
+
+  def get_head_portrait
+    if login_params.has_key?(:username) && login_params.has_key?(:userpwd)
+      @user = User.find_by_username(login_params[:username])
+      if @user && @user.userpwd == login_params[:userpwd] && @user.info.head_portrait
+        file_path = @user.get_image_path
+        if File.exist?(file_path)
+          io = File.open(file_path)
+          io.binmode
+          send_data(io.read, :filename => @user.info.head_portrait, :dispostion => 'attachment')
+          io.close
+        else
+          render :json => {:status => 30}
+        end
+      else
+        render :json => {:status => 21}
+      end
+    else
+      @status = 11 if !login_params.has_key?(:userpwd)
+      @status = 10 if !login_params.has_key?(:username)
+      render :json => {:status => @status}
     end
   end
 
@@ -143,8 +194,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def upload_image(files)
+    File.open(Rails.root.join('public', 'image', files.original_filename), 'wb') do |file|
+      file.write(files.read)
+    end
+    files.original_filename
+  end
+
   def create_params
-    params.permit(:username, :userpwd, :head_portrait, :image_size, :user_sex)
+    params.permit(:username, :userpwd, :head_portrait, :user_sex)
   end
 
   def login_params
@@ -152,7 +210,7 @@ class UsersController < ApplicationController
   end
 
   def update_info_params
-    params.permit(:username, :userpwd, :user_sex, :head_portrait, :image_size, :nickname, :age, :height, :weight, :pace, :phone_number1, :phone_number2)
+    params.permit(:username, :userpwd, :user_sex, :image_size, :nickname, :age, :height, :weight, :pace, :phone_number1, :phone_number2)
     # params.permit(:username, :userpwd, :age)
   end
 
@@ -168,4 +226,7 @@ class UsersController < ApplicationController
     params.permit(:username, :security_code, :new_userpwd)
   end
 
+  def upload_params
+    params.permit(:username, :userpwd, :head_portrait)
+  end
 end

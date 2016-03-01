@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20160223070538) do
 
   create_table "infos", force: :cascade do |t|
@@ -22,11 +23,33 @@ ActiveRecord::Schema.define(version: 20160223070538) do
     t.integer "age",           limit: 4
     t.integer "height",        limit: 4
     t.integer "weight",        limit: 4
+=======
+ActiveRecord::Schema.define(version: 20160226064057) do
+
+  create_table "infos", force: :cascade do |t|
+    t.integer "user_id",       limit: 4
+    t.string  "user_sex",      limit: 255,   default: "男"
+    t.text    "head_portrait", limit: 65535
+    t.string  "image_size",    limit: 255,   default: "16"
+    t.string  "nickname",      limit: 255,   default: "john"
+    t.integer "age",           limit: 4,     default: 25
+    t.integer "height",        limit: 4,     default: 175
+    t.integer "weight",        limit: 4,     default: 70
+>>>>>>> origin/master
     t.integer "pace",          limit: 4
     t.integer "phone_number1", limit: 4
     t.integer "phone_number2", limit: 4
   end
 
+<<<<<<< HEAD
+=======
+  create_table "revisions", force: :cascade do |t|
+    t.string "version",   limit: 255
+    t.string "file_name", limit: 255
+    t.string "file_url",  limit: 255
+  end
+
+>>>>>>> origin/master
   create_table "security_codes", force: :cascade do |t|
     t.string   "code",       limit: 255
     t.integer  "user_id",    limit: 4
@@ -36,10 +59,17 @@ ActiveRecord::Schema.define(version: 20160223070538) do
 
   create_table "settings", force: :cascade do |t|
     t.integer "user_id",    limit: 4
+<<<<<<< HEAD
     t.integer "calorie",    limit: 4
     t.string  "sport_time", limit: 255
     t.integer "step",       limit: 4
     t.integer "distance",   limit: 4
+=======
+    t.integer "calorie",    limit: 4,  default: 320
+    t.integer "sport_time", limit: 4,  default: 70
+    t.integer "step",       limit: 4,  default: 8000
+    t.float   "distance",   limit: 24, default: 5.7
+>>>>>>> origin/master
   end
 
   create_table "users", force: :cascade do |t|

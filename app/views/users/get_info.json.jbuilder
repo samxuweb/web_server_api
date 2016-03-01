@@ -1,7 +1,5 @@
 json.status @status
 json.user_sex @info.user_sex
-json.head_portrait @info.head_portrait
-json.image_size @info.image_size
 json.nickname @info.nickname
 json.age @info.age
 json.height @info.height
