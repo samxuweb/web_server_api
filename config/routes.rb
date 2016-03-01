@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
 
   post 'signin' => 'users#create'
-  post 'login' => 'users#login'
+  get 'login' => 'users#login'
   post 'update_info' => 'users#update_info'
-  post 'get_info' => 'users#get_info'
+  get 'get_info' => 'users#get_info'
   post 'update_setting' => 'users#update_setting'
-  post 'get_setting' => 'users#get_setting'
-  post 'lost_password' => 'users#lost_password'
+  get 'get_setting' => 'users#get_setting'
+  get 'lost_password' => 'users#lost_password'
   post 'set_password' => 'users#set_password'
+  post 'upload' => 'revisions#upload'
+  get 'download' => 'revisions#download'
+  post 'upload_head_portrait' => 'users#upload_head_portrait'
+  get 'get_head_portrait' => 'users#get_head_portrait'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
