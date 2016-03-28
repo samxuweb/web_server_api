@@ -14,5 +14,3 @@
 /config/database.yml
 /config/environments/*
 /config/secrets.yml
-/db/schema.rb
-/pubilc/image/*

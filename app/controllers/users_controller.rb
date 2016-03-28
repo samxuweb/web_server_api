@@ -145,7 +145,7 @@ class UsersController < ApplicationController
           @status = 30
         end
       else
-        @status = 2
+        @status = 20
       end 
     else
       @status = 12 if !upload_params.has_key?(:head_portrait)
