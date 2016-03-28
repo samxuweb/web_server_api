@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
 
   post 'signin' => 'users#create'
-  get 'login' => 'users#login'
+  post 'login' => 'users#login'
   post 'update_info' => 'users#update_info'
-  get 'get_info' => 'users#get_info'
+  post 'get_info' => 'users#get_info'
   post 'update_setting' => 'users#update_setting'
-  get 'get_setting' => 'users#get_setting'
-  get 'lost_password' => 'users#lost_password'
+  post 'get_setting' => 'users#get_setting'
+  post 'lost_password' => 'users#lost_password'
   post 'set_password' => 'users#set_password'
   post 'upload' => 'revisions#upload'
   get 'download' => 'revisions#download'

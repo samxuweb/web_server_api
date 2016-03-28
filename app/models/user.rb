@@ -8,11 +8,8 @@ class User < ActiveRecord::Base
                        :uniqueness => {:message => "uniqueness"}
   validates :userpwd, :presence => {:message => "password can not be blank"}
 
-<<<<<<< HEAD
-=======
   def get_image_path
     return "public/image/" + self.info.head_portrait
   end
 
->>>>>>> origin/master
 end
