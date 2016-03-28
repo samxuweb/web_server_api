@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226064057) do
+ActiveRecord::Schema.define(version: 20160328015746) do
 
   create_table "infos", force: :cascade do |t|
     t.integer "user_id",       limit: 4
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20160226064057) do
     t.integer "age",           limit: 4,     default: 25
     t.integer "height",        limit: 4,     default: 175
     t.integer "weight",        limit: 4,     default: 70
-    t.integer "pace",          limit: 4
+    t.integer "pace",          limit: 4,     default: 70
     t.integer "phone_number1", limit: 4
     t.integer "phone_number2", limit: 4
   end

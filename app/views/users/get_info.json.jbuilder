@@ -1,9 +1,0 @@
-json.status @status
-json.user_sex @info.user_sex
-json.nickname @info.nickname
-json.age @info.age
-json.height @info.height
-json.weight @info.weight
-json.pace @info.pace
-json.phone_number1 @info.phone_number1
-json.phone_number2 @info.phone_number2
