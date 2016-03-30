@@ -1,31 +1,35 @@
 class RevisionsController < ApplicationController
 
+  def index
+    @revisions = Revision.all
+  end
+
   def upload
-    if upload_params.has_key?(:username) && upload_params.has_key?(:userpwd) && upload_params.has_key?(:file) && upload_params.has_key?(:filename)
-      if request.get?
-        @status = 30
-      elsif upload_params[:username] == 'root' && upload_params[:userpwd] == 'pinsole'
+      @revisions = Revision.all
+      if upload_params[:file]
         @revision = Revision.new
         uploaded_io = upload_params[:file]
           File.open(Rails.root.join('public', 'files', uploaded_io.original_filename), 'wb') do |file|
             file.write(uploaded_io.read)
         end
         @revision.file_url = uploaded_io.original_filename
-        @revision.file_name = upload_params[:filename]
+        @revision.file_name = upload_params[:file_name]
+        @revision.version = upload_params[:version]
         if @revision.save
-          @status = 0
+          redirect_to :revisions
         else
-          @status = 30
+          flash[:notice] = "保存失败"
+          render :controller => :revisions, :action => :index
         end
       else
-        @status = 20
+        flash[:notice] = "上传文件为空"
+        render :controller => :revisions, :action => :index
       end
-    else
-      @status = 13 if !upload_params.has_key?(:file)
-      @status = 12 if !upload_params.has_key?(:filename)
-      @status = 11 if !upload_params.has_key?(:userpwd)
-      @status = 10 if !upload_params.has_key?(:username)
-    end
+  end
+
+  def get_version
+    @revision = Revision.last
+    render :json => {:version => @revision.version}
   end
 
   def download
@@ -47,7 +51,8 @@ class RevisionsController < ApplicationController
   private
 
   def upload_params
-    params.permit(:username, :userpwd, :file, :filename)
+    # params.permit(:username, :userpwd, :file, :filename)
+    params.require(:revision).permit(:version, :file, :file_name)
   end
 
 end

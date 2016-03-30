@@ -1,0 +1,35 @@
+<% content_for :header do %>
+  <%= stylesheet_link_tag "bootstrap", "bootstrap-theme" %>
+<% end %>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h3>Pinsole OTA 管理页面</h3>
+    <% if flash[:notice] %><h4><p><%= flash[:notice] %></p></h4><%end%>
+    <%= form_for :revision, url: upload_path do |f| %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+      <div>版本号：<%= f.text_field :version %>
+      版本名：<%= f.text_field :file_name %></div>
+      <div>版本文件：<%= f.file_field :file %>
+      <%= f.submit "OTA上传", class: "btn btn-default" %></div>
+    <% end %>
+    <h3>历史版本</h3>
+    <table class="table table-striped">
+    <tr>
+      <th>版本号</th>
+      <th>版本名</th>
+      <th>版本文件</th>
+    </tr>
+    <% @revisions.each do |revision| %>
+    <tr>
+      <td><%= revision.version %></td>
+      <td><%= revision.file_name %></td>
+      <td><%= revision.file_url %></td>
+    </tr>
+    <% end %>
+    </table>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+
