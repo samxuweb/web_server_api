@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   get 'download' => 'revisions#download'
   post 'upload_head_portrait' => 'users#upload_head_portrait'
   get 'get_head_portrait' => 'users#get_head_portrait'
+  get 'revisions' => 'revisions#index'
+  get 'get_version' => 'revisions#get_version'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
