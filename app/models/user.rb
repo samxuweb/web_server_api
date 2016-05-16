@@ -12,4 +12,8 @@ class User < ActiveRecord::Base
     return "public/image/" + self.info.head_portrait
   end
 
+  def self.default_path
+    return "public/image/head_portrait.png"
+  end
+
 end

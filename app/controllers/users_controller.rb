@@ -8,7 +8,7 @@ class UsersController < ApplicationController
       @user.info = Info.new
       @user.info.user_sex = create_params[:user_sex] if create_params.has_key?(:user_sex)
       if !request.get? && create_params.has_key?(:head_portrait)
-        @user.info.head_portrait = upload_image(create_params[:head_portrait])
+        @user.info.head_portrait = upload_image(create_params[:username], create_params[:head_portrait])
       end
       @user.setting = Setting.new
       if @user.save
@@ -138,7 +138,7 @@ class UsersController < ApplicationController
       if request.get?
         @status = 30
       elsif @user && @user.userpwd == upload_params[:userpwd]
-        @user.info.head_portrait = upload_image(upload_params[:head_portrait])
+        @user.info.head_portrait = upload_image(@user.username, upload_params[:head_portrait])
         if @user.info.save
           @status = 0
         else
@@ -160,6 +160,7 @@ class UsersController < ApplicationController
       @user = User.find_by_username(login_params[:username])
       if @user && @user.userpwd == login_params[:userpwd] && @user.info.head_portrait
         file_path = @user.get_image_path
+        file_path = User.default_path unless File.file?(file_path)
         if File.exist?(file_path)
           io = File.open(file_path)
           io.binmode
@@ -194,11 +195,11 @@ class UsersController < ApplicationController
     end
   end
 
-  def upload_image(files)
-    File.open(Rails.root.join('public', 'image', files.original_filename), 'wb') do |file|
+  def upload_image(name, files)
+    File.open(Rails.root.join('public', 'image', name.to_s + files.original_filename.to_s), 'wb') do |file|
       file.write(files.read)
     end
-    files.original_filename
+    name.to_s + files.original_filename.to_s
   end
 
   def create_params
