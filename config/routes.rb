@@ -14,6 +14,11 @@ Rails.application.routes.draw do
   get 'get_head_portrait' => 'users#get_head_portrait'
   get 'revisions' => 'revisions#index'
   get 'get_version' => 'revisions#get_version'
+  post 'update_sport_time' => 'users#update_sport_time'
+  post 'get_sport_time' => 'users#get_sport_time'
+  post 'update_completion' => 'users#update_completion'
+  post 'get_completion_lists' => 'users#get_completion_lists'
+  post 'get_current_completion' => 'users#get_current_completion'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

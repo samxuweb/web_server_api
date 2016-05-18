@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   has_one :info
   has_one :setting
   has_one :security_code
+  has_many :sport_times
+  has_many :completions
 
   validates :username, :presence => {:message => "presence"},
                        :uniqueness => {:message => "uniqueness"}
